@@ -1,0 +1,317 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ObjectDefinition>  <information>
+    <allowLaunchOnFailedProcess>true</allowLaunchOnFailedProcess>
+    <description/>
+    <displayField>service_id</displayField>
+    <executionDetailsVisibility>5</executionDetailsVisibility>
+    <executionMode>TRANSACTION</executionMode>
+    <group>ENEA Ucpe Manager</group>
+    <icon>/images/repository/CommandDefinition/icons/www server.jpg</icon>
+    <name>ENEA VNF Management</name>
+    <order>10000</order>
+    <poolId>0</poolId>
+    <readVariableVisibility>5</readVariableVisibility>
+    <serviceTaskType>php</serviceTaskType>
+    <showDetailedServiceInstances>true</showDetailedServiceInstances>
+    <showProcessExecConsole>false</showProcessExecConsole>
+    <showVariables>true</showVariables>
+    <visibility>5</visibility>
+  </information>  <variables frozen="0">
+    <variable displayName="Device" displayOrder="0" isMandatory="true" keepOnImport="true" maxLength="100" name="params.device_id" startIncrement="0" type="Device">
+      <sections>
+        <section>Syncronise with ucpeManager</section>
+      </sections>
+    </variable>
+    <variable displayName="Vnfi" displayOrder="2" editable="false" maxLength="100" name="params.vnfi" refDeviceIdVar="params.device_id" startIncrement="0" type="OBMFRef">
+      <sections>
+        <section>Start VNF</section>
+      </sections>
+      <classes>
+        <class>VNF_instances</class>
+      </classes>
+    </variable>
+    <variable displayName="Customer Id" displayOrder="5" maxLength="100" name="params.customer_id" startIncrement="0" type="Customer">
+      <sections>
+        <section>Create MSA Device</section>
+      </sections>
+    </variable>
+    <variable default="17" displayName="Manufacturer Id" displayOrder="6" maxLength="100" name="params.manufacturer_id" startIncrement="0" type="String">
+      <values>
+        <value displayValue="Fortinet">17</value>
+        <value displayValue="Cisco">1</value>
+        <value displayValue="Linux">14020601</value>
+      </values>
+      <sections>
+        <section>Create MSA Device</section>
+      </sections>
+    </variable>
+    <variable default="15102617" displayName="Model Id" displayOrder="7" maxLength="100" name="params.model_id" startIncrement="0" type="String">
+      <values>
+        <value displayValue="Fortigate VA">15102617</value>
+        <value displayValue="Fortigate WAF">15031001</value>
+        <value displayValue="Linux - Generic">14020601</value>
+      </values>
+      <sections>
+        <section>Create MSA Device</section>
+      </sections>
+      <description>14020601</description>
+    </variable>
+    <variable displayName="Device Ip Address" displayOrder="8" maxLength="100" name="params.device_ip_address" startIncrement="0" type="String">
+      <sections>
+        <section>Create MSA Device</section>
+      </sections>
+    </variable>
+    <variable default="admin" displayName="Login" displayOrder="9" maxLength="100" name="params.login" startIncrement="0" type="String">
+      <sections>
+        <section>Create MSA Device</section>
+      </sections>
+    </variable>
+    <variable displayName="Password" displayOrder="10" maxLength="100" name="params.password" startIncrement="0" type="Password">
+      <sections>
+        <section>Create MSA Device</section>
+      </sections>
+    </variable>
+    <variable displayName="New Password" displayOrder="11" maxLength="100" name="params.new_password" startIncrement="0" type="Password">
+      <sections>
+        <section>Create MSA Device</section>
+      </sections>
+    </variable>
+    <variable default="myCommunity" displayName="Snmp Community" displayOrder="12" maxLength="100" name="params.snmp_community" startIncrement="0" type="String">
+      <sections>
+        <section>Create MSA Device</section>
+      </sections>
+    </variable>
+    <variable displayName="Conf Profile Reference" displayOrder="13" maxLength="100" name="params.conf_profile_reference" startIncrement="0" type="String">
+      <sections>
+        <section>Attach Profiles to device</section>
+      </sections>
+    </variable>
+    <variable displayName="Mon Profile Reference" displayOrder="14" maxLength="100" name="params.mon_profile_reference" startIncrement="0" type="String">
+      <sections>
+        <section>Attach Profiles to device</section>
+      </sections>
+    </variable>
+    <variable displayName="VNF Descriptor" displayOrder="15" editable="false" maxLength="100" name="params.vnf_descriptor" refDeviceIdVar="params.device_id" startIncrement="0" type="OBMFRef">
+      <sections>
+        <section>Instantiate VNF</section>
+      </sections>
+      <classes>
+        <class>VNF_descriptors</class>
+      </classes>
+    </variable>
+    <variable displayName="Ucpe Devices" displayOrder="16" maxLength="100" name="params.ucpe_devices" refDeviceIdVar="params.device_id" startIncrement="0" type="OBMFRef">
+      <sections>
+        <section>Instantiate VNF</section>
+      </sections>
+      <classes>
+        <class>devices</class>
+      </classes>
+    </variable>
+    <variable displayName="Vnf Name" displayOrder="17" maxLength="100" name="params.vnf_name" startIncrement="0" type="String">
+      <sections>
+        <section>Instantiate VNF</section>
+      </sections>
+    </variable>
+    <variable displayName="Vnf Device Id" displayOrder="47" maxLength="100" name="params.vnf_device_id" startIncrement="0" type="Device">
+      <sections>
+        <section>MSA Device Provisioning</section>
+      </sections>
+    </variable>
+  </variables>  <example>    <content/>  </example>
+  <process name="Process/ENEA/VNF_Management/Process_New_Service">
+    <visibility>5</visibility>
+    <displayName>New Service</displayName>
+    <icon/>
+    <poolId>0</poolId>
+    <compensation/>
+    <allowSchedule>false</allowSchedule>
+    <type>CREATE</type>
+    <task name="Task_Syncronise_with_ucpeManager.php">
+      <processPath>/opt/fmc_repository/Process/ENEA/VNF_Management/Process_New_Service/Tasks/</processPath>
+      <displayName>Syncronise with ucpeManager</displayName>
+    </task>
+  </process>
+  <process name="Process/ENEA/VNF_Management/Process_Start_VNF">
+    <visibility>5</visibility>
+    <displayName>Start VNF</displayName>
+    <icon/>
+    <poolId>0</poolId>
+    <compensation/>
+    <allowSchedule>false</allowSchedule>
+    <type>UPDATE</type>
+    
+  
+    
+  
+  <task name="Task_Start_VNF.php">
+      <processPath>/opt/fmc_repository/Process/ENEA/VNF_Management/Process_Start_VNF/Tasks/</processPath>
+      <displayName>Start VNF</displayName>
+    </task>
+    <task name="/opt/fmc_repository/Process/ENEA/VNF_Management/Process_New_Service/Tasks/Task_Syncronise_with_ucpeManager.php">
+      <processPath/>
+      <displayName>sync</displayName>
+    </task>
+  </process>
+  <process name="Process/ENEA/VNF_Management/Process_Stop_VNF">
+    <visibility>5</visibility>
+    <displayName>Stop VNF</displayName>
+    <icon/>
+    <poolId>0</poolId>
+    <compensation/>
+    <allowSchedule>false</allowSchedule>
+    <type>UPDATE</type>
+  
+  
+  <task name="Task_Stop_VNF.php">
+      <processPath>/opt/fmc_repository/Process/ENEA/VNF_Management/Process_Stop_VNF/Tasks/</processPath>
+      <displayName>Stop VNF</displayName>
+    </task>
+    <task name="/opt/fmc_repository/Process/ENEA/VNF_Management/Process_New_Service/Tasks/Task_Syncronise_with_ucpeManager.php">
+      <processPath/>
+      <displayName>sync</displayName>
+    </task>
+  </process>
+  
+  <process name="Process/ENEA/VNF_Management/Process_Terminate_VNF">
+    <visibility>5</visibility>
+    <displayName>Terminate VNF</displayName>
+    <icon/>
+    <poolId>0</poolId>
+    <compensation/>
+    <allowSchedule>false</allowSchedule>
+    <type>UPDATE</type>
+  
+  
+  <task name="Task_Delete_VNF.php">
+      <processPath>/opt/fmc_repository/Process/ENEA/VNF_Management/Process_Terminate_VNF/Tasks/</processPath>
+      <displayName>Delete VNF</displayName>
+    </task>
+    <task name="Task_Delete_Device.php">
+      <processPath>/opt/fmc_repository/Process/ENEA/VNF_Management/Process_Terminate_VNF/Tasks/</processPath>
+      <displayName>Delete Device</displayName>
+    </task>
+  </process>
+  <process name="Process/ENEA/VNF_Management/Process_Move_to_Trash">
+    <visibility>5</visibility>
+    <displayName>Move to Trash</displayName>
+    <icon/>
+    <poolId>0</poolId>
+    <compensation/>
+    <allowSchedule>false</allowSchedule>
+    <type>DELETE</type>
+  </process>
+<process name="Process/ENEA/VNF_Management/Process_Synchronise_with_uCPE_Manager">
+    <visibility>5</visibility>
+    <displayName>Synchronise with uCPE Manager</displayName>
+    <icon/>
+    <poolId>0</poolId>
+    <compensation/>
+    <allowSchedule>false</allowSchedule>
+    <type>UPDATE</type>
+    
+  <task name="/opt/fmc_repository/Process/ENEA/VNF_Management/Process_New_Service/Tasks/Task_Syncronise_with_ucpeManager.php">
+      <processPath/>
+      <displayName>Sychronise with uCPEManager</displayName>
+    </task>
+  </process>
+<process name="Process/ENEA/VNF_Management/Process_test">
+    <visibility>5</visibility>
+    <displayName>Deploy new VNF</displayName>
+    <icon/>
+    <poolId>0</poolId>
+    <compensation/>
+    <allowSchedule>false</allowSchedule>
+    <type>UPDATE</type>
+    
+  
+    
+    
+    
+  
+    
+    
+  
+    
+    
+  
+    
+    
+  
+    
+    
+  
+    
+    
+  
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+    
+    
+    
+  
+    
+    
+    
+    
+    
+    
+    
+    
+  
+    
+    
+    
+    
+    
+    
+    
+    
+  <task name="Task_Get_session_token.php">
+      <processPath>/opt/fmc_repository/Process/ENEA/VNF_Management/Process_test/Tasks/</processPath>
+      <displayName>Get session token</displayName>
+    </task>
+    <task name="Task_Get_VNFD_Info.php">
+      <processPath>/opt/fmc_repository/Process/ENEA/VNF_Management/Process_test/Tasks/</processPath>
+      <displayName>Get VNFD Info</displayName>
+    </task>
+    <task name="Task_Get_Device_Info.php">
+      <processPath>/opt/fmc_repository/Process/ENEA/VNF_Management/Process_test/Tasks/</processPath>
+      <displayName>Get Device Info</displayName>
+    </task>
+    <task name="Task_Get_Connection_Info.php">
+      <processPath>/opt/fmc_repository/Process/ENEA/VNF_Management/Process_test/Tasks/</processPath>
+      <displayName>Get Connection Info</displayName>
+    </task>
+    <task name="/opt/fmc_repository/Process/ENEA/VNF_Management/Process_Deploy_new_VNF/Tasks/Task_Instantiate_VNF.php">
+      <processPath/>
+      <displayName>Insantiate VNF</displayName>
+    </task>
+    <task name="/opt/fmc_repository/Process/ENEA/VNF_Management/Process_Deploy_new_VNF/Tasks/Task_Create_MSA_Device.php">
+      <processPath/>
+      <displayName>Create MSA Device</displayName>
+    </task>
+    <task name="/opt/fmc_repository/Process/ENEA/VNF_Management/Process_Deploy_new_VNF/Tasks/Task_MSA_Device_Provisioning.php">
+      <processPath/>
+      <displayName>MSA Device Provisioning</displayName>
+    </task>
+    <task name="/opt/fmc_repository/Process/ENEA/VNF_Management/Process_Deploy_new_VNF/Tasks/Task_Attach_Profiles_to_device.php">
+      <processPath/>
+      <displayName>Attach Profiles to device</displayName>
+    </task>
+    <task name="/opt/fmc_repository/Process/ENEA/VNF_Management/Process_New_Service/Tasks/Task_Syncronise_with_ucpeManager.php">
+      <processPath/>
+      <displayName>Syncronise with uCPE manager</displayName>
+    </task>
+  </process>
+</ObjectDefinition>

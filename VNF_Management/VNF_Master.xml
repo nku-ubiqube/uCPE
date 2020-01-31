@@ -1,0 +1,207 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ObjectDefinition>  <information>
+    <allowLaunchOnFailedProcess>true</allowLaunchOnFailedProcess>
+    <description/>
+    <displayField>service_id</displayField>
+    <executionDetailsVisibility>5</executionDetailsVisibility>
+    <executionMode>TRANSACTION</executionMode>
+    <group>ENEA Ucpe Manager</group>
+    <icon>/images/repository/CommandDefinition/icons/web cluster.jpg</icon>
+    <name>ENEA Bulk VNF Management</name>
+    <order>10000</order>
+    <poolId>0</poolId>
+    <readVariableVisibility>5</readVariableVisibility>
+    <serviceTaskType>php</serviceTaskType>
+    <showDetailedServiceInstances>true</showDetailedServiceInstances>
+    <showProcessExecConsole>false</showProcessExecConsole>
+    <showVariables>true</showVariables>
+    <visibility>5</visibility>
+  </information>  <variables frozen="0">
+    <variable default="UBI261" displayName="Device" displayOrder="0" editable="false" isMandatory="true" keepOnImport="true" maxLength="100" name="params.device_id" startIncrement="0" type="String">
+      <values>
+        <value displayValue="UBI245">UBI245</value>
+        <value displayValue="ENEA Local">UBI261</value>
+      </values>
+      <sections>
+        <section>Syncronise with ucpeManager</section>
+      </sections>
+    </variable>
+    <variable displayName="Device Ip Address" displayOrder="8" maxLength="100" name="params.vnfs.0.device_ip_address" startIncrement="0" type="String">
+      <sections>
+        <section>Create MSA Device</section>
+      </sections>
+    </variable>
+    <variable displayName="VNF Descriptor" displayOrder="15" editable="false" maxLength="100" name="params.vnfs.0.vnfd" refDeviceIdVar="params.device_id" startIncrement="0" type="OBMFRef">
+      <sections>
+        <section>Instantiate VNF</section>
+      </sections>
+      <classes>
+        <class>VNF_descriptors</class>
+      </classes>
+    </variable>
+    <variable displayName="Ucpe Devices" displayOrder="16" maxLength="100" name="params.vnfs.0.ucpe_devices" refDeviceIdVar="params.device_id" startIncrement="0" type="OBMFRef">
+      <sections>
+        <section>Instantiate VNF</section>
+      </sections>
+      <classes>
+        <class>devices</class>
+      </classes>
+    </variable>
+    <variable displayName="Vnf Name" displayOrder="17" maxLength="100" name="params.vnfs.0.vnf_name" startIncrement="0" type="String">
+      <sections>
+        <section>Instantiate VNF</section>
+      </sections>
+    </variable>
+    <variable displayName="Vnfs.0.manufacturer Id" displayOrder="51" maxLength="100" name="params.vnfs.0.manufacturer_id" startIncrement="0" type="String">
+      <sections>
+        <section>Invoke Deploy VNF</section>
+      </sections>
+    </variable>
+    <variable displayName="Vnfs.0.model Id" displayOrder="52" maxLength="100" name="params.vnfs.0.model_id" startIncrement="0" type="String">
+      <sections>
+        <section>Invoke Deploy VNF</section>
+      </sections>
+    </variable>
+    <variable displayName="Vnfs.0.login" displayOrder="54" maxLength="100" name="params.vnfs.0.login" startIncrement="0" type="String">
+      <sections>
+        <section>Invoke Deploy VNF</section>
+      </sections>
+    </variable>
+    <variable displayName="Vnfs.0.password" displayOrder="55" maxLength="100" name="params.vnfs.0.password" startIncrement="0" type="String">
+      <sections>
+        <section>Invoke Deploy VNF</section>
+      </sections>
+    </variable>
+    <variable displayName="Snmp Community" displayOrder="56" maxLength="100" name="params.vnfs.0.snmp_community" startIncrement="0" type="String">
+      <sections>
+        <section>Invoke Deploy VNF</section>
+      </sections>
+    </variable>
+    <variable displayName="Deployment Setting" displayOrder="57" maxLength="100" name="params.vnfs.0.conf_profile_reference" startIncrement="0" type="String">
+      <sections>
+        <section>Invoke Deploy VNF</section>
+      </sections>
+    </variable>
+    <variable displayName="Assurance" displayOrder="58" maxLength="100" name="params.vnfs.0.mon_profile_reference" startIncrement="0" type="String">
+      <sections>
+        <section>Invoke Deploy VNF</section>
+      </sections>
+    </variable>
+  </variables>  <example>    <content/>  </example>
+  <process name="Process/ENEA/VNF_Management/Process_New_Service">
+    <visibility>5</visibility>
+    <displayName>New Service</displayName>
+    <icon/>
+    <poolId>0</poolId>
+    <compensation/>
+    <allowSchedule>false</allowSchedule>
+    <type>CREATE</type>
+    <task name="Task_Syncronise_with_ucpeManager.php">
+      <processPath>/opt/fmc_repository/Process/ENEA/VNF_Management/Process_New_Service/Tasks/</processPath>
+      <displayName>Syncronise with ucpeManager</displayName>
+    </task>
+  </process>
+  
+  
+  
+  
+  
+<process name="Process/ENEA/VNF_Management/Process_Synchronise_with_uCPE_Manager">
+    <visibility>5</visibility>
+    <displayName>Synchronise with uCPE Manager</displayName>
+    <icon/>
+    <poolId>0</poolId>
+    <compensation/>
+    <allowSchedule>false</allowSchedule>
+    <type>UPDATE</type>
+    
+  <task name="/opt/fmc_repository/Process/ENEA/VNF_Management/Process_New_Service/Tasks/Task_Syncronise_with_ucpeManager.php">
+      <processPath/>
+      <displayName>Sychronise with uCPEManager</displayName>
+    </task>
+  </process>
+<process name="Process/ENEA/VNF_Management/Process_test">
+    <visibility>5</visibility>
+    <displayName>Deploy new VNF</displayName>
+    <icon/>
+    <poolId>0</poolId>
+    <compensation/>
+    <allowSchedule>false</allowSchedule>
+    <type>UPDATE</type>
+    
+  
+    
+    
+    
+  
+    
+    
+  
+    
+    
+  
+    
+    
+  
+    
+    
+  
+    
+    
+  
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+    
+    
+    
+  
+    
+    
+    
+    
+    
+    
+    
+    
+  
+    
+    
+    
+    
+    
+    
+    
+    
+  
+    
+    
+    
+    
+    
+    
+    
+    
+  
+    
+  <task name="Task_Get_session_token.php">
+      <processPath>/opt/fmc_repository/Process/ENEA/VNF_Management/Process_test/Tasks/</processPath>
+      <displayName>Get session token</displayName>
+    </task>
+    <task name="Task_Invoke_Deploy_VNF.php">
+      <processPath>/opt/fmc_repository/Process/ENEA/VNF_Management/Process_test/Tasks/</processPath>
+      <displayName>Invoke Deploy VNF</displayName>
+    </task>
+  </process>
+
+</ObjectDefinition>
