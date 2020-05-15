@@ -5,23 +5,21 @@ require_once '/opt/fmc_repository/Process/ENEA/VNF_Management/common.php';
 function list_args()
 {
   create_var_def('vnf_name', 'vnf_name');     
+create_var_def('nics_1_id', 'String'); 
+create_var_def('nics_1_type', 'String');  
+create_var_def('nics_1_interfacename', 'String');
+
+create_var_def('nics_2_id', 'String'); 
+create_var_def('nics_2_type', 'String');  
+create_var_def('nics_2_interfacename', 'String');
+
+create_var_def('nics_3_id', 'String'); 
+create_var_def('nics_3_type', 'String');  
+create_var_def('nics_3_interfacename', 'String');  
 }
 
 check_mandatory_param('vnf_name');
-$prop_f = array();
 
-logToFile(debug_dump($context['cloud_init'],"*********** TESTdata**************\n"));
-if(isset($context['cloud_init']))
-{
-
-    $contents = shell_exec("base64 -w 0 ".$context['cloud_init']); 
-    $prop_f[] = array( 
-                    "name"  => "cloudInit",
-            "value" => $contents 
-    );
-}
-
-//exit;
 $HTTP_M = "POST";
 
 $device_ip       = $context['device_ip'];
@@ -30,30 +28,30 @@ $port            = $context['port'];
 //generate UUI for VNF id
 $uuid            = uuid(openssl_random_pseudo_bytes(16));
 
-//format required connection info
 
 
+/*
 $nics = $context['nics'];
 foreach($nics as $row)
 {
     $name = explode("-",$row['id']);
     $bridge[] = array("name" => "bridge","value" =>$row["interfacename"]);
 
-    $arr = array( 
+	$arr = array( 
            "name" => $name[1],
-           "type" => $row['type'],
+           "type" => "Dpdk",
            "props" =>array(array("name" => "bridge",
-                "value" =>$row["interfacename"]))
+             	"value" =>$row["interfacename"]))
     );
     
     if($row['type'] == "Tap" && isset($row['nicmodel']) && $row['nicmodel'] != "")
-    {
-        $arr["model"] = $row['nicmodel'];
-    }
+	{
+		$arr["model"] = $row['nicmodel'];
+ 	}
 
     $connection_info_fin2[] = $arr;
-}   
-
+}	
+*/
 //========================================================================================
 $device_ip = $context['device_ip'];
 $port      = $context['port'];
@@ -82,6 +80,34 @@ foreach($vnfd_list as $row)
   } 
 }
 
+logToFile(debug_dump($selected_vnfd ['name'],"*********** DESCRIPT data**************\n"));
+
+//format required connection info
+$connection_info_fin2 = array();
+
+    $connection_info_fin2[] = array(
+    	  "name" => $context['nics_1_id'],
+           "type" => $context['nics_1_type'],
+           "props" =>array(array("name" => "bridge",
+             	"value" =>$context['nics_2_interfacename']))
+         );
+    $connection_info_fin2[]   =  array("name" => $context['nics_2_id'],
+           "type" =>$context['nics_2_type'],
+           "props" =>array(array("name" => "bridge",
+             	"value" =>$context['nics_2_interfacename']))
+         );
+
+ 
+
+if($selected_vnfd ['name'] == "pfsesne2")
+{
+      $connection_info_fin2[]   =  array("name" => $context['nics_3_id'],
+           "type" =>$context['nics_3_type'],
+           "props" =>array(array("name" => "bridge",
+             	"value" =>$context['nics_3_interfacename']))
+         );
+
+}
 
 //========================================================================================
 $body = array(
@@ -92,7 +118,7 @@ $body = array(
       "ecManaged"     => false,
       "deviceName"    => $context['device_data']['name'],
       "connections"   => $connection_info_fin2 ,
-      "props"=>$prop_f,
+      "props"=>array(),
       "vnfdFlavour" => "Canonical",
       "vnfdVersion" => "1",
       "vnfd"     => $selected_vnfd,        
@@ -100,21 +126,11 @@ $body = array(
       "_internal_objectType" => "VnfManager/VnfRecord"
     ));
 $body = json_encode($body);
-
-//TODO remove this once curl has been updated!!!
-//create temporary file to put contents of bulk into.
-$myfile = fopen("/opt/fmc_repository/Datafiles/datatemp_{$uuid}.txt", "w") or die("Unable to open file!");
-fwrite($myfile, $body);
-fclose($myfile);
-
-
 $full_url  = "https://$device_ip$port/REST/v2/ServiceMethodExecution/modules/VnfManager/services/Configuration/methods/instantiateVNF";
 
 
-$instnatiate_vnf= curl_http_get($context['sessionToken'], $full_url,"@/opt/fmc_repository/Datafiles/datatemp_{$uuid}.txt" , $HTTP_M);
+$instnatiate_vnf= curl_http_get($context['sessionToken'], $full_url,$body, $HTTP_M);
 
-//delete the temporary file
-unlink("/opt/fmc_repository/Datafiles/datatemp_{$uuid}.txt");
 $vnfr_id = json_decode($instnatiate_vnf['wo_newparams']['response_body'],true);
 
 if($instnatiate_vnf['wo_status'] !== ENDED)

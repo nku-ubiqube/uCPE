@@ -5,17 +5,9 @@ require_once '/opt/fmc_repository/Process/ENEA/VNF_Management/common.php';
 function list_args()
 {
     create_var_def('device_id', 'Device');
-    create_var_def('vnfi', 'String');   
-create_var_def('nics.0.id', 'OBMFRef'); 
-create_var_def('nics.0.type', 'String');  
-create_var_def('nics.0.nicmodel', 'Composite'); 
-create_var_def('nics.0.interfacename', 'OBMFRef'); 
-  create_var_def('cloud_init', 'String');  
 }
-
-
+/*
 if(isset($parameters) ){
-
     $context['device_id'] = $parameters['device_id'];
     $context['vnf_descriptor'] = $parameters['vnf_descriptor'];
     $context['ucpe_devices'] = $parameters['ucpe_devices'];
@@ -23,25 +15,25 @@ if(isset($parameters) ){
     $context['customer_id'] = $parameters['customer_id'];
     $context['manufacturer_id'] = $parameters['manufacturer_id'];
     $context['model_id'] = $parameters['model_id'];
-   isset($parameters['device_ip']) ? $context['device_ip'] =$parameters['device_ip'] : "";
+    $context['device_ip_address'] = $parameters['device_ip_address'];
     $context['login'] = $parameters['login'];
-    $context['password  '] = $parameters['password'];
-    $context['new_password'] = isset($parameters['new_password']) ?$parameters['new_password'] : "";
-    $context['snmp_community'] = isset($parameters['snmp_community'])? $parameters['snmp_community'] : "" ;
-    $context['conf_profile_reference'] = isset($parameters['conf_profile_reference']) ? $parameters['conf_profile_reference']: "";
-    $context['mon_profile_reference'] = isset($parameters['mon_profile_reference']) ? $parameters['mon_profile_reference'] : "";
+    $context['password	'] = $parameters['password'];
+    $context['new_password'] = $parameters['new_password'];
+    $context['snmp_community'] = $parameters['snmp_community'];
+    $context['conf_profile_reference'] = $parameters['conf_profile_reference'];
+    $context['mon_profile_reference'] = $parameters['mon_profile_reference'];
 
  }
-
+*/
 $device_id = substr($context['device_id'], 3);
 //call device to get device info
 $response = _device_read_by_id($device_id);
 
 $response = json_decode($response, true);
 if ($response['wo_status'] !== ENDED) {
-  $response = json_encode($response);
-  echo $response;
-  exit;
+	$response = json_encode($response);
+	echo $response;
+	exit;
 }
 
 $device_ip = $response['wo_newparams']['managementAddress'];
@@ -58,9 +50,9 @@ $port = ($port != "") ? $port :"";
 $login_session = login($response['wo_newparams']['login'], $response['wo_newparams']['password'], $device_ip , $port);
 
 logToFile("**************$login_session***********\n");
-if ($login_session == "") { 
-  echo $login_session;
-  exit;
+if ($login_session == "") {	
+	echo $login_session;
+	exit;
 }
 $port = ($port != "") ? ":".$port :"";
 $context['sessionToken']= $login_session;

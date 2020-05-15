@@ -23,6 +23,12 @@ function list_args()
   create_var_def('vnfs.0.vnfd', 'String');
   create_var_def('vnfs.0.ucpe_devices', 'String');
   create_var_def('vnfs.0.vnf_name', 'String');
+
+   
+  create_var_def('vnfs.0.nics.0.id', 'OBMFRef'); 
+  create_var_def('vnfs.0.nics.0.type', 'String');  
+  create_var_def('vnfs.0.nics.0.nicmodel', 'Composite'); 
+  create_var_def('vnfs.0.nics.0.interfacename', 'OBMFRef');  
 }
 
 $ucpe_manager=$context['device_id'];
@@ -58,7 +64,8 @@ $selfcare_instance_ref=$response['wo_newparams']['serviceId']['serviceExternalRe
 //trigger Deploy the VNF
 $process_name="Process/ENEA/VNF_Management/Process_test";
 $service_name="Process/ENEA/VNF_Management/VNF_Management";
-
+//$ip_address =  $vnf['device_ip_address'];
+$ip_address = "127.0.0.1";
 $body = array(
       "device_id"            => $ucpe_manager,
       "vnf_descriptor"        => $vnf['vnfd'],
@@ -67,13 +74,14 @@ $body = array(
       "customer_id"    => $external_ref,
       "manufacturer_id"    => $vnf['manufacturer_id'],
       "model_id"    => $vnf['model_id'],
-      "device_ip_address"    => $vnf['device_ip_address'],
+      "device_ip_address"    =>$ip_address ,
       "login"    => $vnf['login'],
       "password"    => $vnf['password'],
       "new_password"    => $vnf['password'],
       "snmp_community"    => $vnf['snmp_community'],
       "conf_profile_reference"    => $vnf['conf_profile_reference'],
-      "mon_profile_reference"    => $vnf['mon_profile_reference'],     
+      "mon_profile_reference"    => $vnf['mon_profile_reference'],
+      "nics"=> $vnf['nics']     
     );
 $body = json_encode($body);
 $external_ref=$context['UBIQUBEID'];
