@@ -11,7 +11,8 @@ require_once '/opt/fmc_repository/Process/Reference/Common/Library/msa_common.ph
  */
 function list_args()
 {
-  create_var_def('device_id', 'String');
+   create_var_def('device_id', 'Device');
+   create_var_def('exec_delay', 'Device');
 }
 
 if(isset($parameters) ){
@@ -19,15 +20,17 @@ if(isset($parameters) ){
  }
 check_mandatory_param("device_id");
 
-
-
-
 $device_id = substr($context['device_id'], 3);
+
+$exec_delay = $context['exec_delay'];
+sleep($exec_delay);
+
 /**
 * call to Microservice IMPORT to synchronize the MSA database with the managed UcpeManager VIM
 */
 $response = synchronize_objects_and_verify_response($device_id);
 
+//$context["SERVICEINSTANCEREFERENCE"] = $context["vnf_name"];
 //logToFile($response);
 
 

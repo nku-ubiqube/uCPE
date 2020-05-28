@@ -49,7 +49,7 @@ $response = _device_do_update_config ($device_id);
     echo $response;
   }
 
-if($context['mon_profile_reference'] != "" && $context['conf_profile_reference'] != "")
+if((isset($context['mon_profile_reference']) && isset($context['conf_profile_reference'])) && ($context['mon_profile_reference'] != "" && $context['conf_profile_reference'] != ""))
 {
    $response = prepare_json_response(ENDED, "Configuration and Monitoring profile attached.\n", $context, true);
    echo $response;

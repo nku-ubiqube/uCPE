@@ -3,19 +3,11 @@ require_once '/opt/fmc_repository/Process/Reference/Common/common.php';
 
 function list_args()
 {
-	create_var_def('device_id', 'Device');	
-	create_var_def('vnfi', 'String');	
-	
 }
-
-
-check_mandatory_param('device_id');
-check_mandatory_param('vnfi');		
-
 $device_id = substr($context['device_id'], 3);
-$object_id = $context['vnfi'];
+$object_id = $context['vnfr_id'];
 $micro_service_vars_array = array();
-$micro_service_vars_array['object_id']		= $context['vnfi'];
+$micro_service_vars_array['object_id']		= $context['vnfr_id'];
 $micro_service_vars_array['action']		    = "startVNF";
 
 $VNF = array('VNF_instances' => array($object_id => $micro_service_vars_array));

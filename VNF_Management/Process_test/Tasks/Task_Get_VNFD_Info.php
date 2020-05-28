@@ -25,7 +25,7 @@ $vnfd_list = json_decode($vnfd_list['wo_newparams']['response_body'],TRUE);
 $selected_vnfd = "";
 
 
-logToFile(debug_dump($context['vnf_descriptor'],"*************************\n"));
+logToFile(debug_dump($context['vnf_descriptor'],"************VNF descriptor*************\n"));
 
 foreach($vnfd_list as $row)
 {

@@ -8,7 +8,19 @@ function list_args()
 }
 
 check_mandatory_param('vnf_name');
+$prop_f = array();
 
+if(isset($context['cloud_init']))
+{
+
+    $contents = shell_exec("base64 -w 0 ".$context['cloud_init']); 
+    $prop_f[] = array( 
+                    "name"  => "cloudInit",
+            "value" => $contents 
+    );
+}
+
+//exit;
 $HTTP_M = "POST";
 
 $device_ip       = $context['device_ip'];
@@ -19,29 +31,28 @@ $uuid            = uuid(openssl_random_pseudo_bytes(16));
 
 //format required connection info
 
-$connection_points =$context['selected_vnfd']['connectionPoints'];
-$connection_info = $context['connection_info']['results'];
-$props = array();
 
-
-foreach($connection_info as $row)
+$nics = $context['nics'];
+foreach($nics as $row)
 {
-  $props[] =  array(
-             "name" => "bridge",
-             "value" =>$row['name']
-           );
-}
+    $name = explode("-",$row['id']);
+    $bridge[] = array("name" => "bridge","value" =>$row["interfacename"]);
 
-$connection_info_fin = array();
-foreach($connection_points as $row)
-{
-  $connection_info_fin[] = array( 
-           "name" => $row['name'],
-           "type" => "Dpdk",
-           "props" =>$props,
+    $arr = array( 
+           "name" => $name[1],
+           "type" => $row['type'],
+           "props" =>array(array("name" => "bridge",
+                "value" =>$row["interfacename"]))
+    );
+    
+    if($row['type'] == "Tap" && isset($row['nicmodel']) && $row['nicmodel'] != "")
+    {
+        $arr["model"] = $row['nicmodel'];
+    }
 
-     );
-}
+    $connection_info_fin2[] = $arr;
+}   
+
 //========================================================================================
 $device_ip = $context['device_ip'];
 $port      = $context['port'];
@@ -69,8 +80,6 @@ foreach($vnfd_list as $row)
     break;
   } 
 }
-
-
 //========================================================================================
 $body = array(
   "vnfr"=>array(
@@ -79,8 +88,8 @@ $body = array(
       "ecAutoRestart" => false,
       "ecManaged"     => false,
       "deviceName"    => $context['device_data']['name'],
-      "connections"   => $connection_info_fin,
-      "props"=>array(),
+      "connections"   => $connection_info_fin2 ,
+      "props"=>$prop_f,
       "vnfdFlavour" => "Canonical",
       "vnfdVersion" => "1",
       "vnfd"     => $selected_vnfd,        
@@ -88,11 +97,22 @@ $body = array(
       "_internal_objectType" => "VnfManager/VnfRecord"
     ));
 $body = json_encode($body);
+
+//TODO remove this once curl has been updated!!!
+//create temporary file to put contents of bulk into.
+$myfile = fopen("/opt/fmc_repository/Datafiles/datatemp_{$uuid}.txt", "w") or die("Unable to open file!");
+fwrite($myfile, $body);
+fclose($myfile);
+
+
 $full_url  = "https://$device_ip$port/REST/v2/ServiceMethodExecution/modules/VnfManager/services/Configuration/methods/instantiateVNF";
 
-logToFile("**************Connection Info***********\n");
-$instnatiate_vnf= curl_http_get($context['sessionToken'], $full_url,$body, $HTTP_M);
-logToFile(debug_dump($instnatiate_vnf ,"**********BUG DATA**************\n"));
+
+$instnatiate_vnf= curl_http_get($context['sessionToken'], $full_url,"@/opt/fmc_repository/Datafiles/datatemp_{$uuid}.txt" , $HTTP_M);
+
+//delete the temporary file
+unlink("/opt/fmc_repository/Datafiles/datatemp_{$uuid}.txt");
+$vnfr_id = json_decode($instnatiate_vnf['wo_newparams']['response_body'],true);
 
 if($instnatiate_vnf['wo_status'] !== ENDED)
 {               
@@ -102,7 +122,7 @@ if($instnatiate_vnf['wo_status'] !== ENDED)
 }
 
 $context['instnatiate_vnf'] = $instnatiate_vnf;
-
+$context['vnfr_id'] = $vnfr_id['_internal_objectId'] ;
 task_exit(ENDED, "VNF instantiated");
 
 ?>
