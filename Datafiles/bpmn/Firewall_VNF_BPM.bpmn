@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" id="Definitions_1" targetNamespace="http://bpmn.io/schema/bpmn">
+  <bpmn:process id="PLACEHOLDER_PROCESS_ID" isExecutable="true">
+    <bpmn:startEvent id="StartEvent_1">
+      <bpmn:outgoing>Flow_1eq22cb</bpmn:outgoing>
+      <bpmn:outgoing>Flow_1pb13ra</bpmn:outgoing>
+    </bpmn:startEvent>
+    <bpmn:sequenceFlow id="Flow_1eq22cb" sourceRef="StartEvent_1" targetRef="Activity_0ltgt1h" />
+    <bpmn:sequenceFlow id="Flow_1pb13ra" sourceRef="StartEvent_1" targetRef="Activity_0ltgt1h" />
+    <bpmn:sequenceFlow id="Flow_02fnhff" sourceRef="Activity_0ltgt1h" targetRef="Activity_14no3qe" />
+    <bpmn:endEvent id="Event_1bffvfb">
+      <bpmn:incoming>Flow_05x6ea0</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:sequenceFlow id="Flow_05x6ea0" sourceRef="Activity_14no3qe" targetRef="Event_1bffvfb" />
+    <bpmn:serviceTask id="Activity_14no3qe" name="Configure Firewall VNF">
+      <bpmn:extensionElements>
+        <camunda:connector>
+          <camunda:inputOutput>
+            <camunda:inputParameter name="url">http://PLACEHOLDER_API_URL/orchestration/service/execute/PLACEHOLDER_UBIQUBE_ID?serviceName=Process%2FENEA%2FVNF_Management%2FPfsense%2FConfigure_Pfsense&amp;processName=Process%2FENEA%2FVNF_Management%2FPfsense%2FProcess_Add_Firewall_Rule</camunda:inputParameter>
+            <camunda:inputParameter name="method">POST</camunda:inputParameter>
+            <camunda:inputParameter name="headers">
+              <camunda:map>
+                <camunda:entry key="Authorization">Bearer PLACEHOLDER_AUTHORIZATION_TOKEN</camunda:entry>
+                <camunda:entry key="Accept">application/json</camunda:entry>
+              </camunda:map>
+            </camunda:inputParameter>
+            <camunda:inputParameter name="payload">{"vnf_name":"firewall_vnf_bpm2","exec_delay":"210","action":"pass","target_int":"lan","proto":"tcp","source_port":"80","source_addr":"43.3.0.0/16","dst_net":"lan","descr":"Pass traffic for LAN"}</camunda:inputParameter>
+          </camunda:inputOutput>
+          <camunda:connectorId>http-connector</camunda:connectorId>
+        </camunda:connector>
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_02fnhff</bpmn:incoming>
+      <bpmn:outgoing>Flow_05x6ea0</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:serviceTask id="Activity_0ltgt1h" name="uCPE Instantiate Firewall VNF">
+      <bpmn:extensionElements>
+        <camunda:connector>
+          <camunda:inputOutput>
+            <camunda:inputParameter name="url">http://PLACEHOLDER_API_URL/orchestration/service/execute/PLACEHOLDER_UBIQUBE_ID?serviceName=Process%2FENEA%2FVNF_Management%2FVNF_Management&amp;processName=Process%2FENEA%2FVNF_Management%2FProcess_Create_new_VNF</camunda:inputParameter>
+            <camunda:inputParameter name="method">POST</camunda:inputParameter>
+            <camunda:inputParameter name="headers">
+              <camunda:map>
+                <camunda:entry key="Authorization">Bearer PLACEHOLDER_AUTHORIZATION_TOKEN</camunda:entry>
+                <camunda:entry key="Accept">application/json</camunda:entry>
+              </camunda:map>
+            </camunda:inputParameter>
+            <camunda:inputParameter name="payload">{"device_id":"UBI261","exec_delay":"1","manufacturer_id":"200425","model_id":"200425","device_ip_address":"192.168.0.242","login":"admin","password":"pfsense","new_password":"pfsense","vnf_descriptor":"1d260361-950f-11ea-951d-005056b2c593","ucpe_devices":"1010","conf_profile_reference":"UBIPR157","cloud_init":"/opt/fmc_repository/Datafiles/ENEA/pfsense-nodhcp.iso","vnf_name":"firewall_vnf_bpm2","nics_1_id":"lan","nics_1_type":"Dpdk","nics_1_interfacename":"svc_br","nics_2_id":"wan","nics_2_type":"Dpdk","nics_2_interfacename":"lan_br","nics_3_id":"mgmt","nics_3_type":"Dpdk","nics_3_interfacename":"svc_br"}</camunda:inputParameter>
+          </camunda:inputOutput>
+          <camunda:connectorId>http-connector</camunda:connectorId>
+        </camunda:connector>
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_1eq22cb</bpmn:incoming>
+      <bpmn:incoming>Flow_1pb13ra</bpmn:incoming>
+      <bpmn:outgoing>Flow_02fnhff</bpmn:outgoing>
+    </bpmn:serviceTask>
+  </bpmn:process>
+  <bpmndi:BPMNDiagram id="BPMNDiagram_1">
+    <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="PLACEHOLDER_PROCESS_ID">
+      <bpmndi:BPMNEdge id="Flow_05x6ea0_di" bpmnElement="Flow_05x6ea0">
+        <di:waypoint x="690" y="120" />
+        <di:waypoint x="822" y="120" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_02fnhff_di" bpmnElement="Flow_02fnhff">
+        <di:waypoint x="400" y="120" />
+        <di:waypoint x="590" y="120" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1pb13ra_di" bpmnElement="Flow_1pb13ra">
+        <di:waypoint x="209" y="120" />
+        <di:waypoint x="300" y="120" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1eq22cb_di" bpmnElement="Flow_1eq22cb">
+        <di:waypoint x="209" y="120" />
+        <di:waypoint x="300" y="120" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="_BPMNShape_StartEvent_2" bpmnElement="StartEvent_1">
+        <dc:Bounds x="173" y="102" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_1bffvfb_di" bpmnElement="Event_1bffvfb">
+        <dc:Bounds x="822" y="102" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="ServiceTask_1592984391654_di" bpmnElement="Activity_14no3qe">
+        <dc:Bounds x="590" y="80" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="ServiceTask_1594139809824_di" bpmnElement="Activity_0ltgt1h">
+        <dc:Bounds x="300" y="80" width="100" height="80" />
+      </bpmndi:BPMNShape>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</bpmn:definitions>

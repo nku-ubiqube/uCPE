@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" id="Definitions_1" targetNamespace="http://bpmn.io/schema/bpmn">
+  <bpmn:process id="PLACEHOLDER_PROCESS_ID" isExecutable="true">
+    <bpmn:startEvent id="StartEvent_1">
+      <bpmn:outgoing>Flow_1ogx0zo</bpmn:outgoing>
+    </bpmn:startEvent>
+    <bpmn:sequenceFlow id="Flow_0pu4afr" sourceRef="Activity_0zmlywc" targetRef="Activity_1pvmlmf" />
+    <bpmn:sequenceFlow id="Flow_1ogx0zo" sourceRef="StartEvent_1" targetRef="Activity_10n4vpm" />
+    <bpmn:sequenceFlow id="Flow_1juvudg" sourceRef="Activity_10n4vpm" targetRef="Activity_1dsqyyj" />
+    <bpmn:sequenceFlow id="Flow_1j8c7ac" sourceRef="Activity_1dsqyyj" targetRef="Activity_0zmlywc" />
+    <bpmn:endEvent id="Event_1m4saaf">
+      <bpmn:incoming>Flow_0xzi9sg</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:sequenceFlow id="Flow_0xzi9sg" sourceRef="Activity_1pvmlmf" targetRef="Event_1m4saaf" />
+    <bpmn:serviceTask id="Activity_1dsqyyj" name="Configure SDWAN">
+      <bpmn:extensionElements>
+        <camunda:connector>
+          <camunda:inputOutput>
+            <camunda:inputParameter name="url">http://PLACEHOLDER_API_URL/orchestration/service/execute/PLACEHOLDER_UBIQUBE_ID?serviceName=Process%2FENEA%2FVNF_Management%2FFlexiwan%2FConfigure_Flexiwan&amp;processName=Process%2FENEA%2FVNF_Management%2FFlexiwan%2FProcess_Setup_Flexiwan</camunda:inputParameter>
+            <camunda:inputParameter name="method">POST</camunda:inputParameter>
+            <camunda:inputParameter name="headers">
+              <camunda:map>
+                <camunda:entry key="Authorization">Bearer PLACEHOLDER_AUTHORIZATION_TOKEN</camunda:entry>
+                <camunda:entry key="Accept">application/json</camunda:entry>
+              </camunda:map>
+            </camunda:inputParameter>
+            <camunda:inputParameter name="payload">{"name":"SDWANVNF","defaultRoute":"192.168.0.10","isApproved":"true","destination_network":"48.0.0.3/16","gateway_ip":"192.168.0.10","device_id":"UBI633","exec_delay":"160"}</camunda:inputParameter>
+          </camunda:inputOutput>
+          <camunda:connectorId>http-connector</camunda:connectorId>
+        </camunda:connector>
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_1juvudg</bpmn:incoming>
+      <bpmn:outgoing>Flow_1j8c7ac</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:serviceTask id="Activity_10n4vpm" name="uCPE SDWAN VNF Instantiate">
+      <bpmn:extensionElements>
+        <camunda:connector>
+          <camunda:inputOutput>
+            <camunda:inputParameter name="url">http://PLACEHOLDER_API_URL/orchestration/service/execute/PLACEHOLDER_UBIQUBE_ID?serviceName=Process%2FENEA%2FVNF_Management%2FVNF_Management&amp;processName=Process%2FENEA%2FVNF_Management%2FProcess_Create_new_VNF</camunda:inputParameter>
+            <camunda:inputParameter name="method">POST</camunda:inputParameter>
+            <camunda:inputParameter name="headers">
+              <camunda:map>
+                <camunda:entry key="Authorization">Bearer PLACEHOLDER_AUTHORIZATION_TOKEN</camunda:entry>
+                <camunda:entry key="Accept">application/json</camunda:entry>
+              </camunda:map>
+            </camunda:inputParameter>
+            <camunda:inputParameter name="payload">{"device_id":"UBI261","exec_delay":"1","manufacturer_id":"14020601","model_id":"14020601","device_ip_address":"10.31.1.213","login":"root","password":"$ubiqube","new_password":"$ubiqube","vnf_descriptor":"13d72077-4e4f-11ea-81dc-005056b2c593","ucpe_devices":"1010","vnf_name":"SDWANVNF","cloud_init":" /opt/fmc_repository/Datafiles/ENEA/flexiWan-new.iso","nics_1_id":"LAN","nics_1_type":"Dpdk","nics_1_interfacename":"lan_br","nics_2_id":"WAN","nics_2_type":"Dpdk","nics_2_interfacename":"svc_br"}</camunda:inputParameter>
+          </camunda:inputOutput>
+          <camunda:connectorId>http-connector</camunda:connectorId>
+        </camunda:connector>
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_1ogx0zo</bpmn:incoming>
+      <bpmn:outgoing>Flow_1juvudg</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:serviceTask id="Activity_0zmlywc" name="uCPE Firewall VNF Instantiate">
+      <bpmn:extensionElements>
+        <camunda:connector>
+          <camunda:inputOutput>
+            <camunda:inputParameter name="url">http://PLACEHOLDER_API_URL/orchestration/service/execute/PLACEHOLDER_UBIQUBE_ID?serviceName=Process%2FENEA%2FVNF_Management%2FVNF_Management&amp;processName=Process%2FENEA%2FVNF_Management%2FProcess_Create_new_VNF</camunda:inputParameter>
+            <camunda:inputParameter name="method">POST</camunda:inputParameter>
+            <camunda:inputParameter name="headers">
+              <camunda:map>
+                <camunda:entry key="Authorization">Bearer PLACEHOLDER_AUTHORIZATION_TOKEN</camunda:entry>
+                <camunda:entry key="Accept">application/json</camunda:entry>
+              </camunda:map>
+            </camunda:inputParameter>
+            <camunda:inputParameter name="payload">{"device_id":"UBI261","exec_delay":"140","conf_profile_reference":"UBIPR157","manufacturer_id":"200425","model_id":"200425","device_ip_address":"192.168.0.242","login":"admin","password":"pfsense","new_password":"pfsense","vnf_descriptor":"1d260361-950f-11ea-951d-005056b2c593","ucpe_devices":"1010","vnf_name":"FirewallVNF","nics_1_id":"lan","nics_1_type":"Dpdk","nics_1_interfacename":"svc_br","nics_2_id":"wan","nics_2_type":"Dpdk","nics_2_interfacename":"lan_br","nics_3_id":"mgmt","nics_3_type":"Dpdk","nics_3_interfacename":"svc_br","cloud_init":"/opt/fmc_repository/Datafiles/ENEA/pfsense-nodhcp.iso"}</camunda:inputParameter>
+          </camunda:inputOutput>
+          <camunda:connectorId>http-connector</camunda:connectorId>
+        </camunda:connector>
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_1j8c7ac</bpmn:incoming>
+      <bpmn:outgoing>Flow_0pu4afr</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:serviceTask id="Activity_1pvmlmf" name="Configure firewall">
+      <bpmn:extensionElements>
+        <camunda:connector>
+          <camunda:inputOutput>
+            <camunda:inputParameter name="url">http://PLACEHOLDER_API_URL/orchestration/service/execute/PLACEHOLDER_UBIQUBE_ID?serviceName=Process%2FENEA%2FVNF_Management%2FPfsense%2FConfigure_Pfsense&amp;processName=Process%2FENEA%2FVNF_Management%2FPfsense%2FProcess_Add_Firewall_Rule</camunda:inputParameter>
+            <camunda:inputParameter name="method">POST</camunda:inputParameter>
+            <camunda:inputParameter name="headers">
+              <camunda:map>
+                <camunda:entry key="Authorization">Bearer PLACEHOLDER_AUTHORIZATION_TOKEN</camunda:entry>
+                <camunda:entry key="Accept">application/json</camunda:entry>
+              </camunda:map>
+            </camunda:inputParameter>
+            <camunda:inputParameter name="payload">{"vnf_name":"FirewallVNF","action":"pass","target_int":"lan","proto":"tcp","source_port":"80","source_addr":"43.3.0.0/16","dst_net":"lan","descr":"Pass network traffic","exec_delay":"360"}</camunda:inputParameter>
+          </camunda:inputOutput>
+          <camunda:connectorId>http-connector</camunda:connectorId>
+        </camunda:connector>
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_0pu4afr</bpmn:incoming>
+      <bpmn:outgoing>Flow_0xzi9sg</bpmn:outgoing>
+    </bpmn:serviceTask>
+  </bpmn:process>
+  <bpmndi:BPMNDiagram id="BPMNDiagram_1">
+    <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="PLACEHOLDER_PROCESS_ID">
+      <bpmndi:BPMNEdge id="Flow_0xzi9sg_di" bpmnElement="Flow_0xzi9sg">
+        <di:waypoint x="1010" y="120" />
+        <di:waypoint x="1102" y="120" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1j8c7ac_di" bpmnElement="Flow_1j8c7ac">
+        <di:waypoint x="600" y="120" />
+        <di:waypoint x="710" y="120" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1juvudg_di" bpmnElement="Flow_1juvudg">
+        <di:waypoint x="380" y="120" />
+        <di:waypoint x="500" y="120" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1ogx0zo_di" bpmnElement="Flow_1ogx0zo">
+        <di:waypoint x="209" y="120" />
+        <di:waypoint x="280" y="120" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0pu4afr_di" bpmnElement="Flow_0pu4afr">
+        <di:waypoint x="810" y="120" />
+        <di:waypoint x="910" y="120" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="_BPMNShape_StartEvent_2" bpmnElement="StartEvent_1">
+        <dc:Bounds x="173" y="102" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_1m4saaf_di" bpmnElement="Event_1m4saaf">
+        <dc:Bounds x="1102" y="102" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="ServiceTask_1592389478510_di" bpmnElement="Activity_1dsqyyj">
+        <dc:Bounds x="500" y="80" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="ServiceTask_1594202181578_di" bpmnElement="Activity_10n4vpm">
+        <dc:Bounds x="280" y="80" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="ServiceTask_1594202191608_di" bpmnElement="Activity_0zmlywc">
+        <dc:Bounds x="710" y="80" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="ServiceTask_1594202199395_di" bpmnElement="Activity_1pvmlmf">
+        <dc:Bounds x="910" y="80" width="100" height="80" />
+      </bpmndi:BPMNShape>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</bpmn:definitions>
